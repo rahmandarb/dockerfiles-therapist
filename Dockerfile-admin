@@ -1,0 +1,23 @@
+# Use the official OpenJDK 17 image with Alpine Linux as the base image
+FROM openjdk:17-alpine
+
+# Install git
+RUN apk update && apk add git
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Clone the git project
+RUN git clone https://github.com/Rahman1712/therapist-app-admin.git
+
+# Set the working directory to the cloned project
+WORKDIR /app/therapist-app-admin
+
+# Build the Spring Boot application using Maven (skipping tests)
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+
+# Expose the port the Spring Boot application uses
+EXPOSE 8081
+
+# Run the Spring Boot application when the container starts
+CMD ["java", "-jar", "target/admin-service.jar"]
